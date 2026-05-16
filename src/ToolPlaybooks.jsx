@@ -249,7 +249,7 @@ const TOOLS = [
     name: "Discord Community",
     icon: "🎮",
     accent: NEON.cyan,
-    tagline: "Your always-on creative community",
+    tagline: "Your always-on Mutiny hangout space",
     description:
       "Discord is your community hub for peer connection, real-time voice/video, screen sharing, and async discussion beyond the formal programme channels.",
     gettingStarted: [
@@ -595,7 +595,7 @@ export default function ToolPlaybooks() {
       <div style={{ padding: "24px", borderTop: `1px solid ${NEON.cardBorder}`, textAlign: "center", position: "relative" }}>
         <div style={{ height: 2, background: `linear-gradient(90deg, transparent, ${NEON.cyan}40, ${NEON.pink}40, transparent)`, position: "absolute", top: 0, left: "10%", right: "10%", borderRadius: 1 }} />
         <p style={{ fontFamily: "'Orbitron', monospace", fontSize: 10, color: NEON.dimmed, margin: 0, letterSpacing: 3, textTransform: "uppercase" }}>
-          Mutiny SA · ALX Creative Economy · 2026
+          Mutiny SA · ALX · 2026
         </p>
       </div>
     </div>
