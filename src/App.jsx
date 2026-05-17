@@ -283,6 +283,30 @@ function App() {
           animation: pulseOpacity 2s ease-in-out infinite;
         }
 
+        .skip-button {
+          margin-top: 32px;
+          padding: 10px 28px;
+          border-radius: 8px;
+          border: 1px solid rgba(255, 45, 138, 0.3);
+          background: rgba(255, 45, 138, 0.08);
+          color: #FF2D8A;
+          font-family: 'Rajdhani', sans-serif;
+          font-size: 13px;
+          font-weight: 600;
+          letter-spacing: 1.5px;
+          text-transform: uppercase;
+          cursor: pointer;
+          transition: all 0.3s;
+        }
+        .skip-button:hover {
+          background: rgba(255, 45, 138, 0.15);
+          border-color: rgba(255, 45, 138, 0.5);
+          box-shadow: 0 0 20px rgba(255, 45, 138, 0.2);
+        }
+        @media (max-width: 600px) {
+          .skip-button { padding: 9px 22px; font-size: 11px; margin-top: 24px; }
+        }
+
         @keyframes pulseGlow {
           0%, 100% { box-shadow: 0 0 15px rgba(0, 229, 255, 0.15); }
           50% { box-shadow: 0 0 25px rgba(0, 229, 255, 0.25); }
@@ -313,7 +337,7 @@ function App() {
           <div className="ready-line-top" />
           <div className="ready-line-bottom" />
           <div className="ready-content">
-            <div className="ready-label">Mutiny SA Programme</div>
+            <div className="ready-label">Mutiny · ALX · Programme</div>
             <div className="ready-title">TOOL PLAYBOOKS</div>
             <div className="ready-sub">Your guide to every platform · Built for creators</div>
             <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
@@ -322,6 +346,12 @@ function App() {
               </div>
               <div className="play-hint">Tap to begin</div>
             </div>
+            <button
+              className="skip-button"
+              onClick={(e) => { e.stopPropagation(); setPhase("done"); }}
+            >
+              Skip to Tools →
+            </button>
           </div>
         </div>
       )}

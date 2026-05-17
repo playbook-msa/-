@@ -80,7 +80,7 @@ function renderLinkedText(text, accentColor) {
 
 const TOOLS = [
   {
-    id: "claude", name: "Claude Pro", icon: "🧠", accent: NEON.pink, short: "Claude",
+    id: "claude", name: "Claude", icon: "🧠", accent: NEON.pink, short: "Claude",
     tagline: "Your AI thinking partner",
     description: "Claude is an AI assistant that helps you research, write, brainstorm, analyse data, and build workflows. Think of it as a creative co-pilot that never sleeps.",
     gettingStarted: [
@@ -109,7 +109,7 @@ const TOOLS = [
     ],
   },
   {
-    id: "canva", name: "Canva Pro", icon: "🎨", accent: NEON.cyan, short: "Canva",
+    id: "canva", name: "Canva", icon: "🎨", accent: NEON.cyan, short: "Canva",
     tagline: "Design anything, no design degree needed",
     description: "Canva Pro gives you access to premium templates, brand kits, background remover, Magic Design AI, and collaboration features to produce professional visual content fast.",
     gettingStarted: [
@@ -138,7 +138,7 @@ const TOOLS = [
     ],
   },
   {
-    id: "capcut", name: "CapCut Pro", icon: "🎬", accent: NEON.pink, short: "CapCut",
+    id: "capcut", name: "CapCut", icon: "🎬", accent: NEON.pink, short: "CapCut",
     tagline: "Edit video like a pro, ship content daily",
     description: "CapCut Pro is a powerful video editor with AI-powered features: auto-captions, background removal, voice effects, templates, and a massive library of effects, transitions, and music.",
     gettingStarted: [
@@ -167,7 +167,7 @@ const TOOLS = [
     ],
   },
   {
-    id: "slack", name: "Slack Pro", icon: "💬", accent: NEON.cyan, short: "Slack",
+    id: "slack", name: "Slack", icon: "💬", accent: NEON.cyan, short: "Slack",
     tagline: "Your team's central nervous system",
     description: "Slack is where async communication happens. Channels keep conversations organised by topic. Threads keep discussions focused. Integrations connect your other tools.",
     gettingStarted: [
@@ -283,49 +283,150 @@ const TOOLS = [
   },
 ];
 
-function VideoCard({ video, color, isMobile }) {
+const BASE = typeof import.meta !== "undefined" ? import.meta.env.BASE_URL : "/";
+
+function InterfaceMockup({ toolId, accent, isMobile }) {
+  const [imgError, setImgError] = useState(false);
+  const src = `${BASE}screenshots/${toolId}.png`;
+
   return (
-    <a
-      href={video.url}
-      target="_blank"
-      rel="noopener noreferrer"
-      style={{
-        display: "block",
-        padding: isMobile ? "14px" : "16px 18px",
-        background: NEON.card,
-        borderRadius: 12,
-        border: `1px solid ${NEON.cardBorder}`,
-        textDecoration: "none",
-        color: "inherit",
-        transition: "all 0.25s",
-        cursor: "pointer",
-      }}
-    >
-      <div style={{ display: "flex", alignItems: "flex-start", gap: isMobile ? 10 : 14 }}>
+    <div style={{
+      borderRadius: 12, overflow: "hidden", border: `1px solid ${accent}25`,
+      background: "#0d0d18", marginBottom: isMobile ? 14 : 20,
+      boxShadow: `0 0 30px ${accent}08`, position: "relative",
+    }}>
+      {!imgError ? (
+        <img
+          src={src}
+          alt={`${toolId} interface preview`}
+          onError={() => setImgError(true)}
+          style={{
+            width: "100%", height: "auto", display: "block",
+            maxHeight: isMobile ? 220 : 340, objectFit: "cover", objectPosition: "top",
+          }}
+        />
+      ) : (
         <div style={{
-          width: isMobile ? 40 : 48, height: isMobile ? 40 : 48, borderRadius: 10,
-          background: `linear-gradient(135deg, ${NEON.pink}, ${NEON.pink}AA)`,
+          height: isMobile ? 140 : 200,
           display: "flex", alignItems: "center", justifyContent: "center",
-          fontSize: isMobile ? 16 : 20, flexShrink: 0, color: "#fff",
-          boxShadow: `0 0 12px ${NEON.pink}40`,
+          flexDirection: "column", gap: 8,
+          background: `linear-gradient(135deg, ${accent}06, rgba(255,255,255,0.02))`,
         }}>
-          ▶
+          <span style={{ fontSize: isMobile ? 28 : 36 }}>
+            {toolId === "claude" ? "🧠" : toolId === "canva" ? "🎨" : toolId === "capcut" ? "🎬" :
+             toolId === "slack" ? "💬" : toolId === "google" ? "📊" : toolId === "discord" ? "🎮" : "🦉"}
+          </span>
+          <span style={{
+            fontFamily: "'Rajdhani', sans-serif", fontSize: isMobile ? 11 : 13,
+            color: NEON.dimmed, letterSpacing: 1,
+          }}>
+            Mutiny · ALX
+          </span>
         </div>
-        <div style={{ flex: 1, minWidth: 0 }}>
-          <div style={{ fontWeight: 600, fontSize: isMobile ? 13 : 14, marginBottom: 3, color: NEON.text, lineHeight: 1.3 }}>
-            {video.title}
-          </div>
-          <div style={{ display: "flex", gap: 8, alignItems: "center", marginBottom: 5, flexWrap: "wrap" }}>
-            <span style={{ fontSize: 11, color, fontWeight: 600 }}>{video.channel}</span>
-            <span style={{ fontSize: 11, color: NEON.dimmed }}>•</span>
-            <span style={{ fontSize: 11, color: NEON.muted }}>{video.duration}</span>
-          </div>
-          {!isMobile && (
-            <div style={{ color: NEON.muted, fontSize: 12, lineHeight: 1.5 }}>{video.description}</div>
-          )}
-        </div>
+      )}
+      <div style={{
+        position: "absolute", bottom: 6, right: 8, fontFamily: "'Orbitron', monospace",
+        fontSize: 7, color: `${accent}40`, letterSpacing: 2, textTransform: "uppercase",
+        background: "rgba(5,5,8,0.7)", padding: "2px 6px", borderRadius: 4,
+      }}>
+        Mutiny ALX 
       </div>
-    </a>
+    </div>
+  );
+}
+
+function getYouTubeId(url) {
+  const match = url.match(/[?&]v=([^&]+)/);
+  return match ? match[1] : "";
+}
+
+function VideoCard({ video, color, isMobile }) {
+  const [playing, setPlaying] = useState(false);
+  const videoId = getYouTubeId(video.url);
+
+  return (
+    <div style={{
+      background: NEON.card, borderRadius: 12,
+      border: `1px solid ${playing ? color + "30" : NEON.cardBorder}`,
+      overflow: "hidden", transition: "all 0.25s",
+      boxShadow: playing ? `0 0 20px ${color}10` : "none",
+    }}>
+      {playing ? (
+        <div style={{
+          position: "relative", width: "100%",
+          paddingBottom: "56.25%", /* 16:9 */
+          background: "#000",
+        }}>
+          <iframe
+            src={`https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0`}
+            title={video.title}
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen
+            style={{
+              position: "absolute", top: 0, left: 0,
+              width: "100%", height: "100%", border: "none",
+            }}
+          />
+        </div>
+      ) : (
+        <div
+          onClick={() => setPlaying(true)}
+          style={{
+            position: "relative", width: "100%",
+            paddingBottom: isMobile ? "40%" : "30%",
+            background: `url(https://img.youtube.com/vi/${videoId}/hqdefault.jpg) center/cover no-repeat`,
+            cursor: "pointer",
+          }}
+        >
+          {/* Dark overlay */}
+          <div style={{
+            position: "absolute", top: 0, left: 0, right: 0, bottom: 0,
+            background: "rgba(5,5,8,0.55)",
+          }} />
+          {/* Play button */}
+          <div style={{
+            position: "absolute", top: "50%", left: "50%",
+            transform: "translate(-50%, -50%)",
+            width: isMobile ? 48 : 60, height: isMobile ? 48 : 60,
+            borderRadius: "50%",
+            background: `rgba(255, 45, 138, 0.9)`,
+            display: "flex", alignItems: "center", justifyContent: "center",
+            boxShadow: `0 0 20px rgba(255, 45, 138, 0.5)`,
+            transition: "transform 0.2s",
+          }}>
+            <div style={{
+              width: 0, height: 0, borderStyle: "solid",
+              borderWidth: isMobile ? "8px 0 8px 14px" : "10px 0 10px 18px",
+              borderColor: "transparent transparent transparent #fff",
+              marginLeft: isMobile ? 2 : 3,
+            }} />
+          </div>
+          {/* Duration badge */}
+          <div style={{
+            position: "absolute", bottom: 8, right: 10,
+            background: "rgba(0,0,0,0.7)", borderRadius: 4,
+            padding: "2px 8px", fontSize: 11, color: "#fff",
+            fontFamily: "'DM Sans', sans-serif", fontWeight: 600,
+          }}>
+            {video.duration}
+          </div>
+        </div>
+      )}
+      {/* Info bar */}
+      <div style={{ padding: isMobile ? "10px 14px" : "12px 18px" }}>
+        <div style={{ fontWeight: 600, fontSize: isMobile ? 13 : 14, color: NEON.text, lineHeight: 1.3, marginBottom: 4 }}>
+          {video.title}
+        </div>
+        <div style={{ display: "flex", gap: 8, alignItems: "center", flexWrap: "wrap" }}>
+          <span style={{ fontSize: 11, color, fontWeight: 600 }}>{video.channel}</span>
+          <span style={{ fontSize: 11, color: NEON.dimmed }}>•</span>
+          <span style={{ fontSize: 11, color: NEON.muted }}>{video.duration}</span>
+        </div>
+        {!isMobile && (
+          <div style={{ color: NEON.muted, fontSize: 12, lineHeight: 1.5, marginTop: 6 }}>{video.description}</div>
+        )}
+      </div>
+    </div>
   );
 }
 
@@ -371,7 +472,7 @@ export default function ToolPlaybooks() {
             letterSpacing: isMobile ? 2 : 4, color: NEON.cyan, textTransform: "uppercase",
             marginBottom: 8, textShadow: `0 0 10px ${NEON.cyan}60`,
           }}>
-            Mutiny SA Programme
+            Mutiny · ALX · Programme
           </div>
           <h1 style={{
             fontFamily: "'Orbitron', sans-serif", fontSize: isMobile ? 22 : isTablet ? 28 : 32,
@@ -471,6 +572,9 @@ export default function ToolPlaybooks() {
         }}>
           {tool.description}
         </p>
+
+        {/* INTERFACE PREVIEW */}
+        <InterfaceMockup toolId={activeTool} accent={accent} isMobile={isMobile} />
 
         {/* TABS */}
         <div style={{ display: "flex", gap: 0, borderBottom: `1px solid ${NEON.cardBorder}`, overflowX: "auto" }}>
